@@ -1,6 +1,6 @@
 ---
 name: calculadora-finanzas
-description: Calcula interés compuesto, valor futuro de una inversión, o cuánto tiempo tarda un capital en duplicarse a un interés dado. Usa esta skill cuando el usuario pregunte por interés compuesto, crecimiento de una inversión a lo largo de los años, o "regla del 72".
+description: Hace cosas
 license: MIT
 ---
 
