@@ -1,7 +1,7 @@
 """Conversor de temperatura entre Celsius, Fahrenheit y Kelvin.
 
 Uso:
-    python3 convertir.py --valor 20 --desde C --hasta F
+    python convertir.py --valor 20 --desde C --hasta F
 """
 import argparse
 import json
@@ -38,21 +38,32 @@ def main() -> None:
 
     valor_c = a_celsius(args.valor, args.desde)
     if valor_c < CERO_ABSOLUTO_C:
-        print(json.dumps({
-            "error": (
-                f"{args.valor}{args.desde} está por debajo del cero absoluto "
-                f"({CERO_ABSOLUTO_C}°C). No es una temperatura física válida."
+        print(
+            json.dumps(
+                {
+                    "error": (
+                        f"{args.valor}{args.desde} está por debajo del cero absoluto "
+                        f"({CERO_ABSOLUTO_C}°C). No es una temperatura física válida."
+                    )
+                },
+                ensure_ascii=False,
             )
-        }, ensure_ascii=False))
+        )
         return
 
     resultado = desde_celsius(valor_c, args.hasta)
-    print(json.dumps({
-        "valor_original": args.valor,
-        "unidad_original": args.desde,
-        "valor_convertido": round(resultado, 2),
-        "unidad_destino": args.hasta,
-    }, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "valor_original": args.valor,
+                "unidad_original": args.desde,
+                "valor_convertido": round(resultado, 2),
+                "unidad_destino": args.hasta,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":
