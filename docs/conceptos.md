@@ -3,20 +3,23 @@
 | Concepto de tu mapa             | Dónde está aquí                                                                 | Qué vas a observar |
 |----------------------------------|----------------------------------------------------------------------------------|---------------------|
 | **LLM — el cerebro**            | El modelo detrás de Copilot (eliges el modelo en el selector del chat)          | No lo ves directamente, pero todo lo demás depende de qué modelo elijas |
-| **Prompt**                      | Lo que escribes en Copilot Chat                                                  | Calidad del prompt → calidad de qué skill detecta y qué argumentos pasa al script |
-| **Agente**                      | Copilot Agent mode                                                              | Es el que decide: ¿uso una skill? ¿ejecuto un comando? ¿edito un fichero? |
-| **Bucle del agente**            | La secuencia: lee tu prompt → decide acción → ejecuta script → lee resultado → te responde (o repite si hace falta) | Visible en el panel de chat, paso a paso |
-| **Tool**                        | El terminal de VS Code que Copilot usa para correr `python3 ...`               | Copilot te pedirá aprobar el comando la primera vez — esa confirmación ES la frontera entre "el LLM decide" y "algo se ejecuta de verdad" |
+| **Prompt**                      | Lo que escribes en Copilot Chat                                                  | Calidad del prompt → calidad de qué skill/tool detecta y qué argumentos pasa |
+| **Agente**                      | Copilot Agent mode                                                              | Es el que decide: ¿uso una skill? ¿una tool MCP? ¿ejecuto un comando? |
+| **Bucle del agente**            | La secuencia: lee tu prompt → decide acción → ejecuta → lee resultado → te responde (o repite si hace falta) | Visible en el panel de chat, o en el Agent Debug Panel paso a paso |
+| **Tool**                        | Dos caminos en este repo: (a) el terminal de VS Code ejecutando scripts de skill, (b) las tools reales del servidor MCP en `mcp-server/` con schema JSON | Reto 1 para (a), Reto 4 para (b) y su comparación directa |
 | **Skill**                       | Cada carpeta en `.github/skills/`                                                | El `name` + `description` del SKILL.md es lo único que Copilot ve de entrada |
-| **Descubrimiento progresivo**   | `analizador-csv`: el cuerpo del SKILL.md solo se carga si la descripción matchea; los ficheros en `referencia/` solo se leen si el propio SKILL.md le dice a Copilot que los lea en ese caso concreto | Compara cuántos ficheros lee Copilot con un CSV "limpio" vs uno "raro" |
-| **Skills anidadas (general → específica)** | No la hemos montado todavía — es el reto 3 si quieres ampliarlo | — |
-| **Instructions**                | `.github/copilot-instructions.md`                                               | Siempre está activo, no se "descubre" — compáralo con cómo se comporta una skill |
-| **Memoria de sesión**           | El propio hilo de chat con Copilot                                              | Se pierde si abres un chat nuevo |
-| **Ventana de contexto**         | Todo lo que Copilot ha cargado hasta ahora en este chat: tu prompt + instructions + skill cargada + resultado de scripts | Si encadenas muchas peticiones en el mismo chat, esto crece — es justo lo que tu mapa marca como riesgo de saturación |
-| **Hooks**                       | No están en este repo (Copilot CLI/cloud agent los soporta, VS Code Agent mode no de forma nativa todavía) | — |
+| **Descubrimiento progresivo**   | `analizador-csv`: el cuerpo del SKILL.md solo se carga si la descripción matchea; los ficheros en `referencia/` solo se leen si el propio SKILL.md le dice a Copilot que los lea en ese caso concreto | Reto 2 |
+| **Skills que podrían solaparse**| `calculadora-finanzas` vs `calculadora-prestamos`, diseñadas a propósito para tocarse | Reto 6 |
+| **Instructions**                | `.github/copilot-instructions.md`                                               | Siempre está activo, no se "descubre" — Reto 3 |
+| **Hooks**                       | `.github/hooks/hooks.json` + script de guarda                                   | La única pieza 100% determinista del repo — Reto 5 |
+| **Memoria de sesión**           | El propio hilo de chat con Copilot                                              | Se pierde si abres un chat nuevo — comparar con el estado del servidor MCP, que vive aparte (Reto 4 Ejercicio C) |
+| **Ventana de contexto**         | Todo lo que Copilot ha cargado hasta ahora en este chat                         | Reto 7, incluida la compactación automática/manual |
 
 ## Lo que NO está en este repo (a propósito)
 
-- **MCP**: pediste no meterte ahí todavía.
-- **Subagentes**: en Copilot esto se parece más a "Custom Agents" (`.agent.md`), que es un concepto algo distinto a los subagentes que viste en el curso de Anthropic. Cuando quieras, lo vemos aparte para no mezclar conceptos.
-- **Hooks**: disponibles en Copilot CLI/cloud agent, no en VS Code Agent mode de forma nativa por ahora.
+- **Subagentes**: en Copilot esto se parece más a "Custom Agents" (`.agent.md`), que es un concepto algo distinto a los subagentes que viste en el curso de Anthropic. Pendiente para cuando quieras dar ese paso.
+
+## Lo que SÍ está, y vale la pena remarcar el matiz
+
+- **MCP**: lo metimos en `mcp-server/`. Es la única vía nativa en VS Code para tener tools con function-calling real (schema JSON, argumentos tipados) — sin MCP, lo más parecido que existe son las skills ejecutando scripts por terminal, que es un mecanismo distinto aunque relacionado.
+- **Hooks**: están en Preview en VS Code desde febrero 2026. Usan el mismo formato que Claude Code y Copilot CLI, así que lo que aprendas aquí es transferible.
